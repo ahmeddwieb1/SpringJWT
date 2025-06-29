@@ -7,9 +7,11 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -51,6 +53,11 @@ public class UserResource {
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
     }
+    //TODO
+    @GetMapping("/roles")
+    public ResponseEntity<List<Role>> getRoles() {
+        return ResponseEntity.ok().body(userService.getRoles());
+    }
 
     /**
      * Creates a new user in the system
@@ -58,11 +65,23 @@ public class UserResource {
      * @return ResponseEntity with created user and 201 Created status
      */
     @PostMapping("/saveuser")
-    public ResponseEntity<User> saveUser(@RequestBody User user) {
+    public ResponseEntity<User> saveUser(@Valid @RequestBody User user) {
         URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/saveuser").toUriString());
         return ResponseEntity.created(uri).body(userService.saveuser(user));
     }
+    //TODO
+    @PostMapping("/signup")
+    public ResponseEntity<User> signup(@Valid @RequestBody User user) {
+        URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/signup").toUriString());
+        return ResponseEntity.created(uri).body(userService.saveuser(user));
+    }
+        @DeleteMapping("/delete/{username}")
+        public ResponseEntity<?> deleteuser (@PathVariable String username) {
+            userService.deleteuser(username);
+            return ResponseEntity.noContent().build();
+        }
 
     /**
      * Creates a new role in the system
@@ -94,6 +113,7 @@ public class UserResource {
      * @throws IOException if response writing fails
      * @throws RuntimeException if refresh token is missing or invalid
      */
+    /// TODO
     @GetMapping("/tokenrefresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);
@@ -143,7 +163,7 @@ public class UserResource {
                     .withClaim("roles", user.getRoles().stream()
                             .map(Role::getName)
                             .collect(Collectors.toList()))
-                    .withExpiresAt(new Date(System.currentTimeMillis() + 1 * 60 * 1000)) // 1 minute expiration
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // 1 minute expiration
                     .withIssuer(request.getRequestURL().toString())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {

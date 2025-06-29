@@ -83,7 +83,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
      */
     private boolean isPublicEndpoint(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.equals("/api/login") || path.equals("/api/tokenrefresh");
+        return path.equals("/api/login") || path.equals("/api/tokenrefresh")|| path.equals("/api/signup")|| path.equals("/api/signin");
     }
 
     /**
@@ -135,9 +135,11 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
      */
     private Collection<SimpleGrantedAuthority> extractAuthorities(String[] roles) {
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
-        stream(roles).forEach(role -> {
-            authorities.add(new SimpleGrantedAuthority(role));
-        });
+        if (roles != null) {
+            stream(roles).forEach(role -> {
+                authorities.add(new SimpleGrantedAuthority(role));
+            });
+        }
         return authorities;
     }
 

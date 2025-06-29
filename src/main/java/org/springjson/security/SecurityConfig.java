@@ -67,14 +67,20 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // Public endpoints
                         .requestMatchers(
-                                "/api/login/**",       // Login endpoint
+                                "/api/signup/**",
+//                                "/api/login/**",       // Login endpoint
+                                "/api/signin/**",       // Login endpoint
                                 "/api/tokenrefresh/**", // Token refresh
                                 "/error"              // Error handling
+
+//                                "/api/alluser/**",
+//                                "/api/datasubmit"
                         ).permitAll()
 
                         // Role-based authorization
                         .requestMatchers(HttpMethod.GET, "/api/user/**").hasAuthority("ROLE_USER")
-                        .requestMatchers(HttpMethod.POST, "/api/saveuser/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/saveuser/**","/api/addroletouser/**").hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/api/delete/**").hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         // All other requests require authentication
@@ -94,13 +100,13 @@ public class SecurityConfig {
      * - Custom user details service
      * - Password encoder
      */
-    @Bean
-    public DaoAuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService);
-        authProvider.setPasswordEncoder(bCryptPasswordEncoder);
-        return authProvider;
-    }
+        @Bean
+        public DaoAuthenticationProvider authenticationProvider() {
+            DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+            authProvider.setUserDetailsService(userDetailsService);
+            authProvider.setPasswordEncoder(bCryptPasswordEncoder);
+            return authProvider;
+        }
 
     /**
      * Exposes the AuthenticationManager bean
@@ -116,6 +122,7 @@ public class SecurityConfig {
      */
     @Bean(name = "newBeanName")
     public BCryptPasswordEncoder passwordEncoder() {
+
         return new BCryptPasswordEncoder();
     }
 }

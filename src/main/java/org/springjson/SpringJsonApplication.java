@@ -31,17 +31,21 @@ public class SpringJsonApplication {
             userService.saveRole(new Role(null,"ROLE_ADMIN"));
             userService.saveRole(new Role(null,"ROLE_SUPER_ADMIN"));
 
-            userService.saveuser(new User(null,"ahmed","ahmed@","1234",new ArrayList<>()));
-            userService.saveuser(new User(null,"dina","dina@","1234",new ArrayList<>()));
-            userService.saveuser(new User(null,"soso","soso@","1234",new ArrayList<>()));
-            userService.saveuser(new User(null,"yoyo","yoyo@","1234",new ArrayList<>()));
+            userService.saveuser(new User(null,"ahmed","ahmed@gmail.com","1234",new ArrayList<>()));
+            userService.saveuser(new User(null,"dina","dina@gmail.com","1234",new ArrayList<>()));
+            userService.saveuser(new User(null,"soso","soso@gmail.com","1234",new ArrayList<>()));
+            userService.saveuser(new User(null,"yoyo","yoyo@gmail.com","1234",new ArrayList<>()));
+//TODO
+            //            userService.saveuser(new User(null,"ahmed","ahmed@gmail.com","1234",new ArrayList<>()));
 
-            userService.addRoleToUser("ahmed@","ROLE_MANAGER");
+            userService.addRoleToUser("ahmed@gmail.com","ROLE_MANAGER");
 //            userService.addRoleToUser("ahmed@","ROLE_USER");
-            userService.addRoleToUser("ahmed@","ROLE_ADMIN");
-            userService.addRoleToUser("dina@","ROLE_USER");
-            userService.addRoleToUser("soso@","ROLE_ADMIN");
-            userService.addRoleToUser("yoyo@","ROLE_SUPER_ADMIN");
+            userService.addRoleToUser("ahmed@gmail.com","ROLE_ADMIN");
+            userService.addRoleToUser("dina@gmail.com","ROLE_USER");
+            userService.addRoleToUser("soso@gmail.com","ROLE_ADMIN");
+            userService.addRoleToUser("yoyo@gmail.com","ROLE_SUPER_ADMIN");
+            userService.addRoleToUser(null,"ROLE_SUPER_ADMIN");
+
         };
     }
 }

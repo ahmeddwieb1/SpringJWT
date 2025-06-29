@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>all User</title>
+</head>
+<body>
+<style>
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #f2f2f2;
+    }
+</style>
+<table>
+    <tr>
+        <th>ID
+        <th>Name
+        <th>UserName
+<!--        <th>roles-->
+        <th>password
+<!--        -->
+<!--                        <a th:href="@{/products/edit/{id}(id=${user.id})}">sort</a></th>-->
+<!--                        <a th:href="@{/products/edit/{id}(id=${user.id})}">sort</a></th>-->
+<!--                        <a th:href="@{/products/edit/{id}(id=${user.id})}">sort</a></th>-->
+<!--        -->
+    </tr>
+    <tr th:each="user : ${alluser}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.username}"></td>
+<!--        <td th:text="${user.roles}"></td>-->
+        <td th:text="${user.password}"></td>
+        <td>
+<!--            <a th:href="@{/products/edit/{id}(id=${user.id})}">Edit</a>-->
+<!--            <a th:href="@{/deleteproduct/{id}(id=${user.id})}" onclick="return confirm('Delete this product?')">Delete</a>-->
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>

@@ -56,7 +56,8 @@ public class CustomAuthentcationFilter extends UsernamePasswordAuthenticationFil
      * @throws AuthenticationException if authentication fails
      */
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+    public Authentication attemptAuthentication(HttpServletRequest request,
+                                                HttpServletResponse response)
             throws AuthenticationException {
         // Extract credentials from request parameters
         String username = request.getParameter("username");
@@ -118,7 +119,7 @@ public class CustomAuthentcationFilter extends UsernamePasswordAuthenticationFil
                     .withClaim("roles", user.getAuthorities().stream()
                             .map(GrantedAuthority::getAuthority)
                             .collect(Collectors.toList()))
-                    .withExpiresAt(new Date(System.currentTimeMillis() + 1 * 60 * 1000)) // 1 minute expiration
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // 1 minute expiration
                     .withIssuer(request.getRequestURL().toString())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {

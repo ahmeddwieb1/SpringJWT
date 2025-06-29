@@ -1,5 +1,6 @@
 package org.springjson.Service;
 
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,6 +14,7 @@ import org.springjson.Repo.RoleRepo;
 import org.springjson.Repo.UserRepo;
 import org.springjson.domain.Role;
 import org.springjson.domain.User;
+import org.springjson.security.Emailvalidator;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,15 +23,18 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Transactional
+//@AllArgsConstructor
 @Slf4j
 public class UserServiceImp implements UserService, UserDetailsService {
 
     private final UserRepo userRepo;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepo roleRepo;
+    private final Emailvalidator emailvalidator;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+       //TODO
         User user = userRepo.findByusername(username);
         if (user == null) {
             log.error("User not found with username: {}", username);
@@ -45,6 +50,11 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Override
     public User saveuser(User user) {
+        Boolean isusernamevalid = emailvalidator.test(user.getUsername());
+//TODO
+//        if (!isusernamevalid){
+//            throw new IllegalStateException("Username not valid");
+//        }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         log.info("saving new user to database");
         return userRepo.save(user);
@@ -58,14 +68,21 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Override
     public void addRoleToUser(String username, String roleName) {
-        log.info("adding role {} to user{}", roleName, username);
+        log.info("adding role {} to user {}", roleName, username);
         User user = userRepo.findByusername(username);
+        boolean isvalid = userRepo.existsByUsername(username);
         Role role = roleRepo.findByName(roleName);
-        user.getRoles().add(role);
+        if (user != null && role != null && isvalid) {
+            user.getRoles().add(role);
+        }
+        log.info("added");
     }
 
     @Override
     public User getUser(String username) {
+        if (username == null) {
+            log.error("username is null");
+        }
         log.info("getting user {}", username);
         return userRepo.findByusername(username);
     }
@@ -74,5 +91,21 @@ public class UserServiceImp implements UserService, UserDetailsService {
     public List<User> getUsers() {
         log.info("getting all users");
         return userRepo.findAll();
+    }
+
+    @Override
+    public List<Role> getRoles() {
+        log.info("getting all roles");
+        return roleRepo.findAll();
+    }
+
+    @Override
+    public void deleteuser(String username) {
+        User user = userRepo.findByusername(username);
+        if (user != null) {
+            userRepo.delete(user);
+        } else {
+            throw new UsernameNotFoundException("user NOt found " + username);
+        }
     }
 }
