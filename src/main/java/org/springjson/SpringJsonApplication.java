@@ -36,7 +36,7 @@ public class SpringJsonApplication {
             userService.saveuser(new User(null,"soso","soso@gmail.com","1234",new ArrayList<>()));
             userService.saveuser(new User(null,"yoyo","yoyo@gmail.com","1234",new ArrayList<>()));
 //TODO
-            //            userService.saveuser(new User(null,"ahmed","ahmed@gmail.com","1234",new ArrayList<>()));
+            userService.saveuser(new User(null,"ahmed","ahmed@gmail.com","1234",new ArrayList<>()));
 
             userService.addRoleToUser("ahmed@gmail.com","ROLE_MANAGER");
 //            userService.addRoleToUser("ahmed@","ROLE_USER");

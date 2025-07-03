@@ -1,0 +1,331 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>sign up</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h3>sign up</h3>-->
+
+<!--<form method="post" th:object="${user}" th:action="@{/api/datasubmit}" >-->
+<!--    <label for="name">name</label>-->
+<!--    <br><br>-->
+<!--    <input type="text" name="name" id="name" placeholder="name" th:field="*{name}">-->
+<!--    <br><br>-->
+<!--    <label for="username">username</label>-->
+<!--    <br><br>-->
+<!--    <input type="email" name="username" id="username" placeholder="username" th:field="*{username}">-->
+<!--    <br><br>-->
+<!--    <label for="password">password</label><br><br>-->
+<!--    <input type="password" name="password" id="password" placeholder="password" th:field="*{password}">-->
+<!--    <br><br>-->
+<!--    <input type="submit" value="sign up">-->
+<!--</form>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up</title>
+</head>
+<body>
+<h2>Sign Up</h2>
+
+<form id="signupForm">
+    <input type="text" id="name" placeholder="Name" required><br><br>
+    <input type="email" id="username" placeholder="Email" required><br><br>
+    <input type="password" id="password" placeholder="Password" required><br><br>
+    <button type="submit">Sign Up</button>
+</form>
+
+<p id="resultMessage"></p>
+
+<script>
+    document.getElementById("signupForm").addEventListener("submit", async function (e) {
+        e.preventDefault(); // يمنع إرسال الفورم بالطريقة التقليدية
+
+        const name = document.getElementById("name").value;
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const response = await fetch('/api/signup', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({name, username, password})
+        });
+
+
+
+
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById("resultMessage").innerText = "تم التسجيل بنجاح! مرحبًا " + data.name;
+        } else {
+            document.getElementById("resultMessage").innerText = "حدث خطأ أثناء التسجيل";
+        }
+    });
+</script>
+</body>
+</html>
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Sign Up</title>-->
+<!--    <link rel="stylesheet" href="../CSS/style_signup.css">-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="signup-container">-->
+<!--    <div class="signup-header">-->
+<!--        <h2 class="signup-title">Create Account</h2>-->
+<!--    </div>-->
+
+<!--    <form id="signupForm" class="signup-form">-->
+<!--        <div class="input-group name-input">-->
+<!--            <input type="text" id="name" class="form-input" placeholder="Full Name" required>-->
+<!--            <div class="validation-message">Please enter your full name</div>-->
+<!--        </div>-->
+
+<!--        <div class="input-group email-input">-->
+<!--            <input type="email" id="username" class="form-input" placeholder="Email Address" required>-->
+<!--            <div class="validation-message">Please enter a valid email address</div>-->
+<!--        </div>-->
+
+<!--        <div class="input-group password-input">-->
+<!--            <input type="password" id="password" class="form-input" placeholder="Password" required minlength="6">-->
+<!--            <div class="password-strength">-->
+<!--                <div class="password-strength-bar"></div>-->
+<!--            </div>-->
+<!--            <div class="password-hint">Password must be at least 6 characters long</div>-->
+<!--            <div class="validation-message">Password is too weak</div>-->
+<!--        </div>-->
+
+<!--        <div class="terms-group">-->
+<!--            <input type="checkbox" id="terms" class="terms-checkbox" required>-->
+<!--            <label for="terms" class="terms-label">-->
+<!--                I agree to the <a href="#" class="terms-link">Terms of Service</a> and-->
+<!--                <a href="#" class="terms-link">Privacy Policy</a>-->
+<!--            </label>-->
+<!--        </div>-->
+
+<!--        <button type="submit" class="btn-signup">signup</button>-->
+<!--    </form>-->
+
+<!--    <div id="resultMessage" class="result-message"></div>-->
+
+<!--    <div class="signup-footer">-->
+<!--        <p class="footer-text">Already have an account?</p>-->
+<!--&lt;!&ndash;        TODO :add link sign in&ndash;&gt;-->
+<!--        <a href="#" class="footer-link">Sign in here</a>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    // Password strength checker-->
+<!--    function checkPasswordStrength(password) {-->
+<!--        const strengthIndicator = document.querySelector('.password-strength');-->
+<!--        let strength = 0;-->
+
+<!--        if (password.length >= 6) strength++;-->
+<!--        if (password.match(/[a-z]/) && password.match(/[A-Z]/)) strength++;-->
+<!--        if (password.match(/\d/)) strength++;-->
+<!--        if (password.match(/[^a-zA-Z\d]/)) strength++;-->
+
+<!--        strengthIndicator.className = 'password-strength';-->
+<!--        if (strength >= 4) {-->
+<!--            strengthIndicator.classList.add('strong');-->
+<!--        } else if (strength >= 2) {-->
+<!--            strengthIndicator.classList.add('medium');-->
+<!--        } else if (strength >= 1) {-->
+<!--            strengthIndicator.classList.add('weak');-->
+<!--        }-->
+
+<!--        return strength;-->
+<!--    }-->
+
+<!--    // Real-time password strength checking-->
+<!--    document.getElementById('password').addEventListener('input', function() {-->
+<!--        checkPasswordStrength(this.value);-->
+<!--    });-->
+
+<!--    // Form validation-->
+<!--    function validateForm() {-->
+<!--        const name = document.getElementById('name').value.trim();-->
+<!--        const email = document.getElementById('username').value.trim();-->
+<!--        const password = document.getElementById('password').value;-->
+<!--        const terms = document.getElementById('terms').checked;-->
+
+<!--        let isValid = true;-->
+
+<!--        // Name validation-->
+<!--        const nameInput = document.getElementById('name');-->
+<!--        if (name.length < 2) {-->
+<!--            nameInput.classList.add('invalid');-->
+<!--            nameInput.parentNode.querySelector('.validation-message').classList.add('show');-->
+<!--            isValid = false;-->
+<!--        } else {-->
+<!--            nameInput.classList.remove('invalid');-->
+<!--            nameInput.classList.add('valid');-->
+<!--            nameInput.parentNode.querySelector('.validation-message').classList.remove('show');-->
+<!--        }-->
+
+<!--        // Email validation-->
+<!--        const emailInput = document.getElementById('username');-->
+<!--        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;-->
+<!--        if (!emailRegex.test(email)) {-->
+<!--            emailInput.classList.add('invalid');-->
+<!--            emailInput.parentNode.querySelector('.validation-message').classList.add('show');-->
+<!--            isValid = false;-->
+<!--        } else {-->
+<!--            emailInput.classList.remove('invalid');-->
+<!--            emailInput.classList.add('valid');-->
+<!--            emailInput.parentNode.querySelector('.validation-message').classList.remove('show');-->
+<!--        }-->
+
+<!--        // Password validation-->
+<!--        const passwordInput = document.getElementById('password');-->
+<!--        const passwordStrength = checkPasswordStrength(password);-->
+<!--        if (passwordStrength < 2) {-->
+<!--            passwordInput.classList.add('invalid');-->
+<!--            passwordInput.parentNode.querySelector('.validation-message').classList.add('show');-->
+<!--            isValid = false;-->
+<!--        } else {-->
+<!--            passwordInput.classList.remove('invalid');-->
+<!--            passwordInput.classList.add('valid');-->
+<!--            passwordInput.parentNode.querySelector('.validation-message').classList.remove('show');-->
+<!--        }-->
+
+<!--        // Terms validation-->
+<!--        if (!terms) {-->
+<!--            isValid = false;-->
+<!--            document.querySelector('.terms-group').style.color = '#dc3545';-->
+<!--        } else {-->
+<!--            document.querySelector('.terms-group').style.color = '';-->
+<!--        }-->
+
+<!--        return isValid;-->
+<!--    }-->
+
+<!--    // Form submission-->
+<!--    document.getElementById("signupForm").addEventListener("submit", async function (e) {-->
+<!--        e.preventDefault();-->
+
+<!--        if (!validateForm()) {-->
+<!--            document.querySelector('.signup-container').classList.add('shake');-->
+<!--            setTimeout(() => {-->
+<!--                document.querySelector('.signup-container').classList.remove('shake');-->
+<!--            }, 500);-->
+<!--            return;-->
+<!--        }-->
+
+<!--        const submitBtn = document.querySelector('.btn-signup');-->
+<!--        const resultMessage = document.getElementById("resultMessage");-->
+<!--        const name = document.getElementById("name").value.trim();-->
+<!--        const username = document.getElementById("username").value.trim();-->
+<!--        const password = document.getElementById("password").value;-->
+
+<!--        // Add loading state-->
+<!--        submitBtn.classList.add('loading');-->
+<!--        submitBtn.disabled = true;-->
+
+<!--        // Clear previous messages-->
+<!--        resultMessage.className = 'result-message';-->
+<!--        resultMessage.textContent = '';-->
+
+<!--        try {-->
+<!--            const response = await fetch('/api/signup', {-->
+<!--                method: 'POST',-->
+<!--                headers: {-->
+<!--                    'Content-Type': 'application/json'-->
+<!--                },-->
+<!--                body: JSON.stringify({ name, username, password })-->
+<!--            });-->
+
+<!--            // Remove loading state-->
+<!--            submitBtn.classList.remove('loading');-->
+<!--            submitBtn.disabled = false;-->
+
+<!--            if (response.ok) {-->
+<!--                const data = await response.json();-->
+<!--                resultMessage.textContent = "تم التسجيل بنجاح! مرحبًا " + data.name;-->
+<!--                resultMessage.classList.add('success', 'show');-->
+
+<!--                // Add success animation-->
+<!--                document.querySelector('.signup-container').classList.add('success-bounce');-->
+
+<!--                // Reset form-->
+<!--                document.getElementById('signupForm').reset();-->
+<!--                document.querySelectorAll('.form-input').forEach(input => {-->
+<!--                    input.classList.remove('valid', 'invalid');-->
+<!--                });-->
+<!--                document.querySelector('.password-strength').className = 'password-strength';-->
+
+<!--                // Redirect after success (optional)-->
+<!--                setTimeout(() => {-->
+<!--                    // window.location.href = '/signin';-->
+<!--                }, 3000);-->
+<!--            } else {-->
+<!--                const errorData = await response.json().catch(() => ({}));-->
+<!--                resultMessage.textContent = errorData.message || "حدث خطأ أثناء التسجيل";-->
+<!--                resultMessage.classList.add('error', 'show');-->
+
+<!--                // Add shake effect to form-->
+<!--                document.querySelector('.signup-container').classList.add('shake');-->
+<!--                setTimeout(() => {-->
+<!--                    document.querySelector('.signup-container').classList.remove('shake');-->
+<!--                }, 500);-->
+<!--            }-->
+<!--        } catch (error) {-->
+<!--            // Remove loading state-->
+<!--            submitBtn.classList.remove('loading');-->
+<!--            submitBtn.disabled = false;-->
+
+<!--            resultMessage.textContent = "خطأ في الاتصال بالخادم";-->
+<!--            resultMessage.classList.add('error', 'show');-->
+
+<!--            // Add shake effect to form-->
+<!--            document.querySelector('.signup-container').classList.add('shake');-->
+<!--            setTimeout(() => {-->
+<!--                document.querySelector('.signup-container').classList.remove('shake');-->
+<!--            }, 500);-->
+<!--        }-->
+<!--    });-->
+
+<!--    // Clear messages when user starts typing-->
+<!--    document.querySelectorAll('.form-input').forEach(input => {-->
+<!--        input.addEventListener('input', function() {-->
+<!--            const resultMessage = document.getElementById("resultMessage");-->
+<!--            resultMessage.classList.remove('show');-->
+
+<!--            // Remove validation classes on input-->
+<!--            this.classList.remove('invalid');-->
+<!--            this.parentNode.querySelector('.validation-message').classList.remove('show');-->
+<!--        });-->
+<!--    });-->
+
+<!--    // Real-time email validation-->
+<!--    document.getElementById('username').addEventListener('blur', function() {-->
+<!--        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;-->
+<!--        if (this.value && !emailRegex.test(this.value)) {-->
+<!--            this.classList.add('invalid');-->
+<!--            this.parentNode.querySelector('.validation-message').classList.add('show');-->
+<!--        }-->
+<!--    });-->
+
+<!--    // Real-time name validation-->
+<!--    document.getElementById('name').addEventListener('blur', function() {-->
+<!--        if (this.value.trim().length < 2) {-->
+<!--            this.classList.add('invalid');-->
+<!--            this.parentNode.querySelector('.validation-message').classList.add('show');-->
+<!--        }-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

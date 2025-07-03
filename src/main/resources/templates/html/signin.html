@@ -1,0 +1,182 @@
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <title>sign up</title>-->
+<!--</head>-->
+<!--<body>-->
+<!--<h3>sign in</h3>-->
+
+<!--<form method="post" th:object="${user}" th:action="@{/api/alluser}">-->
+<!--    <label for="username">username</label>-->
+<!--    <br><br>-->
+<!--    <input type="email" name="username" id="username" placeholder="username" th:field="*{username}">-->
+<!--    <br><br>-->
+<!--    <label for="password">password</label><br><br>-->
+<!--    <input type="password" name="password" id="password" placeholder="password" th:field="*{password}">-->
+<!--    <br><br>-->
+<!--    <input type="submit" value="sign in">-->
+<!--</form>-->
+<!--</body>-->
+<!--</html>-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign in</title>
+</head>
+<body>
+<h2>Sign in</h2>
+
+<form id="signinForm">
+    <input type="email" id="username" placeholder="Email" required><br><br>
+    <input type="password" id="password" placeholder="Password" required><br><br>
+    <button type="submit">Sign in</button>
+</form>
+
+<p id="resultMessage"></p>
+
+<script>
+    document.getElementById("signinForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ username, password })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            document.getElementById("resultMessage").innerText = "تم التسجيل بنجاح! مرحبًا " + data.name;
+        } else {
+            document.getElementById("resultMessage").innerText = "حدث خطأ أثناء التسجيل";
+        }
+    });
+</script>
+</body>
+</html>
+
+
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>Sign In</title>-->
+<!--    <link rel="stylesheet" href="../CSS/style_signin.css">-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="signin-container">-->
+<!--    <div class="signin-header">-->
+<!--        <h2 class="signin-title">Welcome Back</h2>-->
+<!--        <p class="signin-subtitle">Please sign in to your account</p>-->
+<!--    </div>-->
+
+<!--    <form id="signinForm" class="signin-form">-->
+<!--        <div class="input-group email-input">-->
+<!--            <input type="email" id="username" class="form-input" placeholder="Email Address" required>-->
+<!--        </div>-->
+
+<!--        <div class="input-group password-input">-->
+<!--            <input type="password" id="password" class="form-input" placeholder="Password" required>-->
+<!--        </div>-->
+
+<!--        <div class="checkbox-group">-->
+<!--            <input type="checkbox" id="remember" class="checkbox-input">-->
+<!--            <label for="remember" class="checkbox-label">Remember me</label>-->
+<!--        </div>-->
+
+<!--        <button type="submit" class="btn-signin">Sign In</button>-->
+<!--    </form>-->
+
+<!--    <div id="resultMessage" class="result-message"></div>-->
+
+<!--    <div class="signin-footer">-->
+<!--        <a href="#" class="footer-link">Forgot your password?</a>-->
+<!--    </div>-->
+<!--</div>-->
+
+<!--<script>-->
+<!--    document.getElementById("signinForm").addEventListener("submit", async function (e) {-->
+<!--        e.preventDefault();-->
+
+<!--        const submitBtn = document.querySelector('.btn-signin');-->
+<!--        const resultMessage = document.getElementById("resultMessage");-->
+<!--        const username = document.getElementById("username").value;-->
+<!--        const password = document.getElementById("password").value;-->
+
+<!--        // Add loading state-->
+<!--        submitBtn.classList.add('loading');-->
+<!--        submitBtn.disabled = true;-->
+
+<!--        // Clear previous messages-->
+<!--        resultMessage.className = 'result-message';-->
+<!--        resultMessage.textContent = '';-->
+
+<!--        try {-->
+<!--            const response = await fetch('/api/login', {-->
+<!--                method: 'POST',-->
+<!--                headers: {-->
+<!--                    'Content-Type': 'application/json'-->
+<!--                },-->
+<!--                body: JSON.stringify({ username, password })-->
+<!--            });-->
+
+<!--            // Remove loading state-->
+<!--            submitBtn.classList.remove('loading');-->
+<!--            submitBtn.disabled = false;-->
+
+<!--            if (response.ok) {-->
+<!--                const data = await response.json();-->
+<!--                resultMessage.textContent = "تم التسجيل بنجاح! مرحبًا " + data.name;-->
+<!--                resultMessage.classList.add('success', 'show');-->
+
+<!--                // Redirect after success (optional)-->
+<!--                setTimeout(() => {-->
+<!--                    // window.location.href = '/dashboard';-->
+<!--                }, 2000);-->
+<!--            } else {-->
+<!--                resultMessage.textContent = "حدث خطأ أثناء التسجيل";-->
+<!--                resultMessage.classList.add('error', 'show');-->
+
+<!--                // Add shake effect to form-->
+<!--                document.querySelector('.signin-container').classList.add('shake');-->
+<!--                setTimeout(() => {-->
+<!--                    document.querySelector('.signin-container').classList.remove('shake');-->
+<!--                }, 500);-->
+<!--            }-->
+<!--        } catch (error) {-->
+<!--            // Remove loading state-->
+<!--            submitBtn.classList.remove('loading');-->
+<!--            submitBtn.disabled = false;-->
+
+<!--            resultMessage.textContent = "خطأ في الاتصال بالخادم";-->
+<!--            resultMessage.classList.add('error', 'show');-->
+
+<!--            // Add shake effect to form-->
+<!--            document.querySelector('.signin-container').classList.add('shake');-->
+<!--            setTimeout(() => {-->
+<!--                document.querySelector('.signin-container').classList.remove('shake');-->
+<!--            }, 500);-->
+<!--        }-->
+<!--    });-->
+
+<!--    // Clear message when user starts typing-->
+<!--    document.querySelectorAll('.form-input').forEach(input => {-->
+<!--        input.addEventListener('input', function() {-->
+<!--            const resultMessage = document.getElementById("resultMessage");-->
+<!--            resultMessage.classList.remove('show');-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+<!--</body>-->
+<!--</html>-->

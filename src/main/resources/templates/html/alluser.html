@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>all User</title>
+    <link rel="stylesheet" href="style_alluser.css">
+</head>
+<body>
+
+<table>
+    <tr>
+        <th>ID
+        <th>Name
+        <th>UserName
+<!--        <th>roles-->
+        <th>password
+<!--        -->
+<!--                        <a th:href="@{/products/edit/{id}(id=${user.id})}">sort</a></th>-->
+<!--                        <a th:href="@{/products/edit/{id}(id=${user.id})}">sort</a></th>-->
+<!--                        <a th:href="@{/products/edit/{id}(id=${user.id})}">sort</a></th>-->
+<!--        -->
+    </tr>
+    <tr th:each="user : ${alluser}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.name}"></td>
+        <td th:text="${user.username}"></td>
+<!--        <td th:text="${user.roles}"></td>-->
+        <td th:text="${user.password}"></td>
+        <td>
+<!--            <a th:href="@{/products/edit/{id}(id=${user.id})}">Edit</a>-->
+<!--            <a th:href="@{/deleteproduct/{id}(id=${user.id})}" onclick="return confirm('Delete this product?')">Delete</a>-->
+        </td>
+    </tr>
+</table>
+
+</body>
+</html>
+
+
+<!--<!DOCTYPE html>-->
+<!--<html lang="en">-->
+<!--<head>-->
+<!--    <meta charset="UTF-8">-->
+<!--    <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+<!--    <title>All Users</title>-->
+<!--    <link rel="stylesheet" href="../CSS/style_alluser.css">-->
+<!--</head>-->
+<!--<body>-->
+<!--<div class="container">-->
+<!--    <div class="header">-->
+<!--        <h1>User Management</h1>-->
+<!--    </div>-->
+
+<!--    <div class="table-wrapper">-->
+<!--        <table class="user-table">-->
+<!--            <thead>-->
+<!--            <tr>-->
+<!--                <th>ID</th>-->
+<!--                <th>Name</th>-->
+<!--                <th>Username</th>-->
+<!--                <th>Password</th>-->
+<!--                <th class="actions">Actions</th>-->
+<!--            </tr>-->
+<!--            </thead>-->
+<!--            <tbody>-->
+<!--            <tr class="user-row">-->
+<!--                <td class="user-id">1</td>-->
+<!--                <td class="user-name">John Doe</td>-->
+<!--                <td class="user-username">johndoe</td>-->
+<!--                <td><span class="password-cell">••••••••</span></td>-->
+<!--                <td class="actions">-->
+<!--                    <a href="#" class="btn btn-edit">Edit</a>-->
+<!--                    <a href="#" class="btn btn-delete" onclick="return confirm('Delete this user?')">Delete</a>-->
+<!--                </td>-->
+<!--            </tr>-->
+
+<!--            <tr class="user-row" th:each="user : ${alluser}">-->
+<!--                <td class="user-id" th:text="${user.id}"></td>-->
+<!--                <td class="user-name" th:text="${user.name}"></td>-->
+<!--                <td class="user-username" th:text="${user.username}"></td>-->
+<!--                <td><span class="password-cell" th:text="${user.password}"></span></td>-->
+<!--                <td class="actions">-->
+<!--                    <a th:href="@{/users/edit/{id}(id=${user.id})}" class="btn btn-edit">Edit</a>-->
+<!--                    <a th:href="@{/users/delete/{id}(id=${user.id})}" class="btn btn-delete"-->
+<!--                       onclick="return confirm('Delete this user?')">Delete</a>-->
+<!--                </td>-->
+<!--            </tr>-->
+
+<!--            </tbody>-->
+<!--        </table>-->
+<!--    </div>-->
+<!--</div>-->
+<!--</body>-->
+<!--</html>-->

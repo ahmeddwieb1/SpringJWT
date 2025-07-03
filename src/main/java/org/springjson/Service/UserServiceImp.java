@@ -34,7 +34,7 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       //TODO
+        //TODO:
         User user = userRepo.findByusername(username);
         if (user == null) {
             log.error("User not found with username: {}", username);
@@ -50,14 +50,14 @@ public class UserServiceImp implements UserService, UserDetailsService {
 
     @Override
     public User saveuser(User user) {
-        Boolean isusernamevalid = emailvalidator.test(user.getUsername());
+        boolean isusernamevalid = emailvalidator.test(user.getUsername());
 //TODO
-//        if (!isusernamevalid){
-//            throw new IllegalStateException("Username not valid");
-//        }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        log.info("saving new user to database");
-        return userRepo.save(user);
+        if (isusernamevalid) {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            log.info("saving new user to database");
+            return userRepo.save(user);
+        }
+        return null;
     }
 
     @Override
@@ -96,7 +96,9 @@ public class UserServiceImp implements UserService, UserDetailsService {
     @Override
     public List<Role> getRoles() {
         log.info("getting all roles");
-        return roleRepo.findAll();
+        var roles = roleRepo.findAll();
+        log.info("role {}", roles);
+        return roles;
     }
 
     @Override

@@ -113,7 +113,7 @@ public class UserResource {
      * @throws IOException if response writing fails
      * @throws RuntimeException if refresh token is missing or invalid
      */
-    /// TODO
+    // TODO
     @GetMapping("/tokenrefresh")
     public void refreshToken(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String authorizationHeader = request.getHeader(AUTHORIZATION);

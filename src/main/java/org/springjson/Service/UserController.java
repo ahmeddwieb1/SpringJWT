@@ -20,7 +20,7 @@ public class UserController {
     }
 
     @GetMapping("/signup")
-    public String addnewproduct(Model model) {
+    public String signup(Model model) {
 
         return "signup";
     }

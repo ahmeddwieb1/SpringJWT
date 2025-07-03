@@ -78,10 +78,10 @@ public class SecurityConfig {
                         ).permitAll()
 
                         // Role-based authorization
-                        .requestMatchers(HttpMethod.GET, "/api/user/**").hasAuthority("ROLE_USER")
-                        .requestMatchers(HttpMethod.POST, "/api/saveuser/**","/api/addroletouser/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/api/delete/**").hasAuthority("ROLE_ADMIN")
-                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+//                        .requestMatchers(HttpMethod.GET, "/api/user/**").hasAuthority("ROLE_USER")
+//                        .requestMatchers(HttpMethod.POST, "/api/saveuser/**","/api/addroletouser/**").hasAuthority("ROLE_ADMIN")
+//                        .requestMatchers(HttpMethod.DELETE,"/api/delete/**").hasAuthority("ROLE_ADMIN")
+//                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         // All other requests require authentication
                         .anyRequest().authenticated()
