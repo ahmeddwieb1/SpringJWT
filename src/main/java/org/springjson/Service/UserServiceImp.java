@@ -48,10 +48,11 @@ public class UserServiceImp implements UserService, UserDetailsService {
         return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
     }
 
+    //TODO:we can edit this method tho be came option<User>
     @Override
     public User saveuser(User user) {
         boolean isusernamevalid = emailvalidator.test(user.getUsername());
-//TODO
+        //DONE:make it work
         if (isusernamevalid) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             log.info("saving new user to database");
@@ -72,12 +73,12 @@ public class UserServiceImp implements UserService, UserDetailsService {
         User user = userRepo.findByusername(username);
         boolean isvalid = userRepo.existsByUsername(username);
         Role role = roleRepo.findByName(roleName);
-        if (user != null && role != null && isvalid) {
+        boolean isrole = roleRepo.existsByName(roleName);
+        if (user != null && role != null && isvalid && isrole) {
             user.getRoles().add(role);
         }
         log.info("added");
     }
-
     @Override
     public User getUser(String username) {
         if (username == null) {

@@ -17,8 +17,8 @@ public class Emailvalidator implements Predicate<String> {
 
     @Override
     public boolean test(String username) {
-        User user = userRepo.findByusername(username);
-        return username != null && username.matches(EMAIL_REGEX) && user == null;
+        boolean user = userRepo.existsByUsername(username);
+        return username != null && username.matches(EMAIL_REGEX) && !user;
     }
 
     public boolean test1(String username) {
