@@ -65,26 +65,26 @@ public class SecurityConfig {
 
                 // Configure authorization rules
                 .authorizeHttpRequests(auth -> auth
-                        // Public endpoints
-                        .requestMatchers(
-                                "/api/signup/**",
-//                                "/api/login/**",       // Login endpoint
-                                "/api/signin/**",       // Login endpoint
-                                "/api/tokenrefresh/**", // Token refresh
-                                "/error"              // Error handling
+                                // Public endpoints
+                                .requestMatchers(
+                                        "/api/signup/**",
+                                        "/api/login/**",       // Login endpoint
+                                        "/api/signin/**",       // Login endpoint
+                                        "/api/tokenrefresh/**", // Token refresh
+                                        "/error"              // Error handling
 
 //                                "/api/alluser/**",
 //                                "/api/datasubmit"
-                        ).permitAll()
+                                ).permitAll()
 
-                        // Role-based authorization
+                                // Role-based authorization
 //                        .requestMatchers(HttpMethod.GET, "/api/user/**").hasAuthority("ROLE_USER")
 //                        .requestMatchers(HttpMethod.POST, "/api/saveuser/**","/api/addroletouser/**").hasAuthority("ROLE_ADMIN")
 //                        .requestMatchers(HttpMethod.DELETE,"/api/delete/**").hasAuthority("ROLE_ADMIN")
 //                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
-                        // All other requests require authentication
-                        .anyRequest().authenticated()
+                                // All other requests require authentication
+                                .anyRequest().authenticated()
                 )
 
                 // Add custom filters
@@ -94,19 +94,20 @@ public class SecurityConfig {
 
         return http.build();
     }
+    //TODO:learn more about DaoAuthenticationProvider
 
     /**
      * Configures the authentication provider with:
      * - Custom user details service
      * - Password encoder
      */
-        @Bean
-        public DaoAuthenticationProvider authenticationProvider() {
-            DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-            authProvider.setUserDetailsService(userDetailsService);
-            authProvider.setPasswordEncoder(bCryptPasswordEncoder);
-            return authProvider;
-        }
+    @Bean
+    public DaoAuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
+        authProvider.setUserDetailsService(userDetailsService);
+        authProvider.setPasswordEncoder(bCryptPasswordEncoder);
+        return authProvider;
+    }
 
     /**
      * Exposes the AuthenticationManager bean
@@ -122,7 +123,6 @@ public class SecurityConfig {
      */
     @Bean(name = "newBeanName")
     public BCryptPasswordEncoder passwordEncoder() {
-
         return new BCryptPasswordEncoder();
     }
 }

@@ -33,27 +33,27 @@ public class UserServiceImp implements UserService, UserDetailsService {
     private final Emailvalidator emailvalidator;
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         //TODO:
-        User user = userRepo.findByusername(username);
+        User user = userRepo.findByEmail(email);
         if (user == null) {
-            log.error("User not found with username: {}", username);
-            throw new UsernameNotFoundException("User not found with username: " + username);
+            log.error("User not found with email: {}", email);
+            throw new UsernameNotFoundException("User not found with email: " + email);
         } else {
-            log.info("User found with username: {}", username);
+            log.info("User found with email: {}", email);
         }
         Collection<SimpleGrantedAuthority> authorities = new ArrayList<>();
         user.getRoles().forEach(role ->
                 authorities.add(new SimpleGrantedAuthority(role.getName())));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), authorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
     }
 
     //TODO:we can edit this method tho be came option<User>
     @Override
     public User saveuser(User user) {
-        boolean isusernamevalid = emailvalidator.test(user.getUsername());
+        boolean isemailvalid = emailvalidator.test(user.getEmail());
         //DONE:make it work
-        if (isusernamevalid) {
+        if (isemailvalid) {
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             log.info("saving new user to database");
             return userRepo.save(user);
@@ -68,10 +68,10 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
-    public void addRoleToUser(String username, String roleName) {
-        log.info("adding role {} to user {}", roleName, username);
-        User user = userRepo.findByusername(username);
-        boolean isvalid = userRepo.existsByUsername(username);
+    public void addRoleToUser(String email, String roleName) {
+        log.info("adding role {} to user {}", roleName, email);
+        User user = userRepo.findByEmail(email);
+        boolean isvalid = userRepo.existsByEmail(email);
         Role role = roleRepo.findByName(roleName);
         boolean isrole = roleRepo.existsByName(roleName);
         if (user != null && role != null && isvalid && isrole) {
@@ -80,12 +80,12 @@ public class UserServiceImp implements UserService, UserDetailsService {
         log.info("added");
     }
     @Override
-    public User getUser(String username) {
-        if (username == null) {
-            log.error("username is null");
+    public User getUser(String email) {
+        if (email == null) {
+            log.error("email is null");
         }
-        log.info("getting user {}", username);
-        return userRepo.findByusername(username);
+        log.info("getting user {}", email);
+        return userRepo.findByEmail(email);
     }
 
     @Override
@@ -103,12 +103,12 @@ public class UserServiceImp implements UserService, UserDetailsService {
     }
 
     @Override
-    public void deleteuser(String username) {
-        User user = userRepo.findByusername(username);
+    public void deleteuser(String email) {
+        User user = userRepo.findByEmail(email);
         if (user != null) {
             userRepo.delete(user);
         } else {
-            throw new UsernameNotFoundException("user NOt found " + username);
+            throw new UsernameNotFoundException("user not found " + email);
         }
     }
 }

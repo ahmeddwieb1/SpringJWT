@@ -16,14 +16,14 @@ public class Emailvalidator implements Predicate<String> {
     }
 
     @Override
-    public boolean test(String username) {
-        boolean user = userRepo.existsByUsername(username);
-        return username != null && username.matches(EMAIL_REGEX) && !user;
+    public boolean test(String email) {
+        boolean user = userRepo.existsByEmail(email);
+        return email != null && email.matches(EMAIL_REGEX) && !user;
     }
 
-    public boolean test1(String username) {
-        User user = userRepo.findByusername(username);
-        return username != null && user == null;
+    public boolean test1(String email) {
+        User user = userRepo.findByEmail(email);
+        return email != null && user == null;
     }
 
 

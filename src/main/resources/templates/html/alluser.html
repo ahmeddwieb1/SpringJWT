@@ -11,7 +11,7 @@
     <tr>
         <th>ID
         <th>Name
-        <th>UserName
+        <th>Email
 <!--        <th>roles-->
         <th>password
 <!--        -->
@@ -23,7 +23,7 @@
     <tr th:each="user : ${alluser}">
         <td th:text="${user.id}"></td>
         <td th:text="${user.name}"></td>
-        <td th:text="${user.username}"></td>
+        <td th:text="${user.email}"></td>
 <!--        <td th:text="${user.roles}"></td>-->
         <td th:text="${user.password}"></td>
         <td>

@@ -20,7 +20,7 @@ public class User {
     private Long id;
     @NotBlank(message = "Name is required")
     private String name;
-    private String username;
+    private String email;
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)

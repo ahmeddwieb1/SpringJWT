@@ -53,6 +53,7 @@ public class UserResource {
     public ResponseEntity<List<User>> getUsers() {
         return ResponseEntity.ok().body(userService.getUsers());
     }
+
     //TODO
     @GetMapping("/roles")
     public ResponseEntity<List<Role>> getRoles() {
@@ -70,6 +71,7 @@ public class UserResource {
                 .path("/api/saveuser").toUriString());
         return ResponseEntity.created(uri).body(userService.saveuser(user));
     }
+
     //TODO
     @PostMapping("/signup")
     public ResponseEntity<User> signup(@Valid @RequestBody User user) {
@@ -77,11 +79,12 @@ public class UserResource {
                 .path("/api/signup").toUriString());
         return ResponseEntity.created(uri).body(userService.saveuser(user));
     }
-        @DeleteMapping("/delete/{username}")
-        public ResponseEntity<?> deleteuser (@PathVariable String username) {
-            userService.deleteuser(username);
-            return ResponseEntity.noContent().build();
-        }
+
+    @DeleteMapping("/delete/{email}")
+    public ResponseEntity<?> deleteuser(@PathVariable String email) {
+        userService.deleteuser(email);
+        return ResponseEntity.noContent().build();
+    }
 
     /**
      * Creates a new role in the system
@@ -97,12 +100,12 @@ public class UserResource {
 
     /**
      * Assigns a role to an existing user
-     * @param form DTO containing username and roleName (from request body)
+     * @param form DTO containing email and roleName (from request body)
      * @return ResponseEntity with 200 OK status on success
      */
     @PostMapping("/addroletouser")
     public ResponseEntity<?> addRoleToUser(@RequestBody RoleToUserForm form) {
-        userService.addRoleToUser(form.getUsername(), form.getRoleName());
+        userService.addRoleToUser(form.getEmail(), form.getRoleName());
         return ResponseEntity.ok().build();
     }
 
@@ -121,17 +124,16 @@ public class UserResource {
         if (authorizationHeader == null || !authorizationHeader.startsWith("Bearer ")) {
             throw new RuntimeException("Refresh token is missing");
         }
-
         try {
             String refreshToken = authorizationHeader.substring("Bearer ".length());
             Algorithm algorithm = Algorithm.HMAC256("jwtSecret".getBytes());
 
             // Verify and decode the refresh token
             DecodedJWT decodedJWT = JWT.require(algorithm).build().verify(refreshToken);
-            String username = decodedJWT.getSubject();
+            String email = decodedJWT.getSubject();
 
             // Get user details from database
-            User user = userService.getUser(username);
+            User user = userService.getUser(email);
 
             // Generate new access token
             String accessToken = generateNewAccessToken(request, user, algorithm, response);
@@ -159,11 +161,11 @@ public class UserResource {
                                           HttpServletResponse response) {
         try {
             return JWT.create()
-                    .withSubject(user.getUsername())
+                    .withSubject(user.getEmail())
                     .withClaim("roles", user.getRoles().stream()
                             .map(Role::getName)
                             .collect(Collectors.toList()))
-                    .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // 1 minute expiration
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // 5 minutes expiration
                     .withIssuer(request.getRequestURL().toString())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
@@ -215,8 +217,8 @@ public class UserResource {
  */
 @Data
 class RoleToUserForm {
-    /** Username to assign the role to */
-    private String username;
+    /** Email to assign the role to */
+    private String email;
 
     /** Name of the role to be assigned */
     private String roleName;

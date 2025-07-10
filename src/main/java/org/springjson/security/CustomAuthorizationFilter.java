@@ -28,14 +28,14 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 /**
  * CustomAuthorizationFilter - JWT Authorization Filter that validates access tokens
  * and sets up Spring Security authentication context.
- *
+ * <p>
  * This filter:
  * 1. Skips authorization for login and token refresh endpoints
  * 2. Validates JWT tokens from Authorization header
  * 3. Extracts user roles from the token
  * 4. Sets up Spring Security context for authenticated users
  * 5. Handles authorization errors with proper JSON responses
- *
+ * <p>
  * Extends OncePerRequestFilter to ensure single execution per request
  */
 @Slf4j
@@ -43,11 +43,12 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     /**
      * Processes each HTTP request to check JWT authorization
-     * @param request HttpServletRequest
-     * @param response HttpServletResponse
+     *
+     * @param request     HttpServletRequest
+     * @param response    HttpServletResponse
      * @param filterChain FilterChain to continue processing
      * @throws ServletException if servlet error occurs
-     * @throws IOException if I/O error occurs
+     * @throws IOException      if I/O error occurs
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -78,16 +79,18 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     /**
      * Checks if request is for a public endpoint that doesn't require authorization
+     *
      * @param request HttpServletRequest to check
      * @return true if public endpoint, false otherwise
      */
     private boolean isPublicEndpoint(HttpServletRequest request) {
         String path = request.getServletPath();
-        return path.equals("/api/login") || path.equals("/api/tokenrefresh")|| path.equals("/api/signup")|| path.equals("/api/signin");
+        return path.equals("/api/login") || path.equals("/api/tokenrefresh") || path.equals("/api/signup") || path.equals("/api/signin");
     }
 
     /**
      * Checks if Authorization header contains a Bearer token
+     *
      * @param authorizationHeader Authorization header value
      * @return true if valid Bearer token present, false otherwise
      */
@@ -97,9 +100,10 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     /**
      * Authenticates user from JWT token and continues filter chain
-     * @param request HttpServletRequest
-     * @param response HttpServletResponse
-     * @param filterChain FilterChain
+     *
+     * @param request             HttpServletRequest
+     * @param response            HttpServletResponse
+     * @param filterChain         FilterChain
      * @param authorizationHeader Authorization header containing JWT
      * @throws Exception if token validation or authentication fails
      */
@@ -113,7 +117,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
         Algorithm algorithm = Algorithm.HMAC256("jwtSecret".getBytes());
 
         DecodedJWT decodedJWT = JWT.require(algorithm).build().verify(token);
-        String username = decodedJWT.getSubject();
+        String email = decodedJWT.getSubject();
         String[] roles = decodedJWT.getClaim("roles").asArray(String.class);
 
         // Convert roles to Spring Security authorities
@@ -121,7 +125,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
         // Set up Spring Security context
         UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(username, null, authorities);
+                new UsernamePasswordAuthenticationToken(email, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
         // Continue filter chain with authenticated user
@@ -130,6 +134,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     /**
      * Converts JWT role claims to Spring Security authorities
+     *
      * @param roles Array of role names from JWT
      * @return Collection of granted authorities
      */
@@ -145,7 +150,8 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
 
     /**
      * Handles authorization errors by sending JSON error response
-     * @param response HttpServletResponse
+     *
+     * @param response  HttpServletResponse
      * @param exception Exception that occurred
      * @throws IOException if response writing fails
      */

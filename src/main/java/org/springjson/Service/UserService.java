@@ -8,9 +8,9 @@ import java.util.List;
 public interface UserService {
     User saveuser(User user);
     Role saveRole(Role role);
-    void addRoleToUser(String username,String roleName);
-    User getUser(String username);
+    void addRoleToUser(String email,String roleName);
+    User getUser(String email);
     List<User> getUsers();
     List<Role> getRoles();
-    void deleteuser(String username);
+    void deleteuser(String email);
 }

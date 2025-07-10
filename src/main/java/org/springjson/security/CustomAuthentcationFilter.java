@@ -28,12 +28,12 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 /**
  * CustomAuthenticationFilter - Extends Spring Security's UsernamePasswordAuthenticationFilter
  * to provide JWT-based authentication.
- *
+ * <p>
  * This filter handles:
  * 1. Authentication attempts (username/password validation)
  * 2. Successful authentication (JWT token generation)
  * 3. Token response formatting (JSON response with access and refresh tokens)
- *
+ * <p>
  * Note: Currently uses a static secret key (marked with TODO for improvement)
  */
 @Slf4j
@@ -42,6 +42,7 @@ public class CustomAuthentcationFilter extends UsernamePasswordAuthenticationFil
 
     /**
      * Constructs the authentication filter with required dependencies
+     *
      * @param authenticationManager Spring Security authentication manager
      */
     public CustomAuthentcationFilter(AuthenticationManager authenticationManager) {
@@ -50,7 +51,8 @@ public class CustomAuthentcationFilter extends UsernamePasswordAuthenticationFil
 
     /**
      * Attempts to authenticate the user with credentials from the request
-     * @param request HttpServletRequest containing username/password parameters
+     *
+     * @param request  HttpServletRequest containing username/password parameters
      * @param response HttpServletResponse
      * @return Authentication object if successful
      * @throws AuthenticationException if authentication fails
@@ -60,13 +62,13 @@ public class CustomAuthentcationFilter extends UsernamePasswordAuthenticationFil
                                                 HttpServletResponse response)
             throws AuthenticationException {
         // Extract credentials from request parameters
-        String username = request.getParameter("username");
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
-        log.info("Authentication attempt for username: {}", username);
+        log.info("Authentication attempt for email: {}", email);
 
         // Create authentication token
         UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(username, password);
+                new UsernamePasswordAuthenticationToken(email, password);
 
         // Delegate authentication to the manager
         return authenticationManager.authenticate(authToken);
@@ -74,9 +76,10 @@ public class CustomAuthentcationFilter extends UsernamePasswordAuthenticationFil
 
     /**
      * Handles successful authentication by generating and returning JWT tokens
-     * @param request HttpServletRequest
-     * @param response HttpServletResponse where tokens will be written
-     * @param chain FilterChain
+     *
+     * @param request        HttpServletRequest
+     * @param response       HttpServletResponse where tokens will be written
+     * @param chain          FilterChain
      * @param authentication Successful authentication object containing user details
      * @throws IOException if response writing fails
      */
@@ -103,10 +106,11 @@ public class CustomAuthentcationFilter extends UsernamePasswordAuthenticationFil
 
     /**
      * Generates the access JWT token with user claims
-     * @param request HttpServletRequest for issuer URL
-     * @param user Authenticated user details
+     *
+     * @param request   HttpServletRequest for issuer URL
+     * @param user      Authenticated user details
      * @param algorithm JWT signing algorithm
-     * @param response HttpServletResponse for error handling
+     * @param response  HttpServletResponse for error handling
      * @return Generated access token or null if generation fails
      */
     private String generateAccessToken(HttpServletRequest request,
@@ -119,7 +123,7 @@ public class CustomAuthentcationFilter extends UsernamePasswordAuthenticationFil
                     .withClaim("roles", user.getAuthorities().stream()
                             .map(GrantedAuthority::getAuthority)
                             .collect(Collectors.toList()))
-                    .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // 1 minute expiration
+                    .withExpiresAt(new Date(System.currentTimeMillis() + 5 * 60 * 1000)) // 5 minutes expiration
                     .withIssuer(request.getRequestURL().toString())
                     .sign(algorithm);
         } catch (JWTCreationException exception) {
@@ -131,8 +135,9 @@ public class CustomAuthentcationFilter extends UsernamePasswordAuthenticationFil
 
     /**
      * Generates the refresh JWT token
-     * @param request HttpServletRequest for issuer URL
-     * @param user Authenticated user details
+     *
+     * @param request   HttpServletRequest for issuer URL
+     * @param user      Authenticated user details
      * @param algorithm JWT signing algorithm
      * @return Generated refresh token
      */
@@ -148,8 +153,9 @@ public class CustomAuthentcationFilter extends UsernamePasswordAuthenticationFil
 
     /**
      * Sends the token response as JSON
-     * @param response HttpServletResponse to write to
-     * @param accessToken JWT access token
+     *
+     * @param response     HttpServletResponse to write to
+     * @param accessToken  JWT access token
      * @param refreshToken JWT refresh token
      * @throws IOException if response writing fails
      */
